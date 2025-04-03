@@ -40,19 +40,11 @@ asm_read_hard_disk:
     push dx
     
     ; 计算扇区号 (S) = (LBA % 63) + 1
-    ; 这里先用dx,再截断到dl（但是为什么不直接用dl呢？）
     xor dx, dx
     mov cx, 63          ; 每磁道扇区数
     idiv cx              ; ax / cx，商在ax，余数在dx
     inc dx              ; 扇区号从1开始
     mov cl, dl          ; CL的低6位 = 扇区号(1-63)
-
-    ; mov ah,2
-    ; mov al,1
-    ; mov ch,0
-    ; mov dh,0
-    ; mov dl,0x80
-    ; int 0x13
 
     ; 计算磁头号(H) = (LBA / 63) % 18 和 柱面号(C) = (LBA / 63) / 18
     xor dx, dx
@@ -60,10 +52,8 @@ asm_read_hard_disk:
     idiv di             ; ax / cx，商在ax (柱面号)，余数在dx (磁头号)
 
     mov ch, al          ; CH = 柱面号的低8位
-    ; shl ah, 6           ; 将柱面号的高2位左移
-    ; ; or cl, ah           ; CL = 扇区号 | 柱面号高2位
     mov dh, dl          ; DH = 磁头号
-    mov dl, 80h         ; DL = 驱动器号 (80h表示第一个硬盘)
+    mov dl, 80h         ; DL = 驱动器号 
     
     mov al,1        ;AL = 读取1个扇区
     mov ah, 2h       ; AH = 02h (读取扇区功能),
