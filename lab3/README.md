@@ -26,19 +26,19 @@
     |    MBR     | 0x7c00 |   0x200(512B)   | 0x7e00 |
     | bootloader | 0x7e00 | 0xa00(512B * 5) | 0x8800 |
 - 使用 `git clone` 克隆项目文件夹到本地
-  - `mbr.asm`：使用 LAB 模式读取硬盘代码，然后加载 `bootloader` 到地址 `0x7e00` 处
+  - `mbr.asm`：使用 LBA 模式读取硬盘代码，然后加载 `bootloader` 到地址 `0x7e00` 处
   - `bootloader.asm`：实现打印字符 <font color = 0x00A8A8> run bootloader </font> 
 - 编写 `makefile` 文件
   ![makefile](./images/image-10.png)
 - 在终端输入 `make run` 运行代码
   ![alt text](./images/image-11.png)
 ##### 1.2 使用 CHS 模式读取硬盘
-- LAB 与 CHS 对比
+- LBA 与 CHS 对比
     |         |                               逻辑扇区读取                               |                         端口读取                          |
     | :-----: | :----------------------------------------------------------------------: | :-------------------------------------------------------: |
-    | **LAB** |                          只要给出逻辑扇区号即可                          |                  但需要手动去读取I/O端口                  |
+    | **LBA** |                          只要给出逻辑扇区号即可                          |                  但需要手动去读取I/O端口                  |
     | **CHS** | 需要给出逻辑扇区号对应的磁头（Heads）、扇区（Sectors）和柱面（Cylinder） | BIOS提供了实模式下读取硬盘的中断，不需要关心具体的I/O端口 |
-- 给出 LAB 到 CHS 的转换公式：
+- 给出 LBA 到 CHS 的转换公式：
     - 关键参数：
         | 参数                                      | 数值 |
         | ----------------------------------------- | ---- |
@@ -49,17 +49,17 @@
         ![alt text](./images/image-13.png)
     - 公式：
         - 柱面号
-            $$ 
+            ```math 
             Cylinder = LBA / (Heads * Sectors)
-            $$ 
+            ``` 
         - 磁头号
-            $$ 
+            ```math 
             Head = (LBA / Sectors) \% Heads
-            $$
+            ```
         - 扇区号
-            $$ 
+            ```math 
             Sector = (LBA \% Sectors) + 1
-            $$
+            ```
         
 - 实现代码见 [关键代码](#三-关键代码)
 - 实验结果：
