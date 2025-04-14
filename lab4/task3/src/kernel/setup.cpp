@@ -10,7 +10,11 @@ extern "C" void setup_kernel()
     interruptManager.initialize();
 
     // 尝试触发除0错误
-    int a = 1 / 0;
+    // int a = 1 / 0;
+
+    //数组越界错误
+    int a[5];
+    a[10] = 1;
 
     // 死循环
     asm_halt();

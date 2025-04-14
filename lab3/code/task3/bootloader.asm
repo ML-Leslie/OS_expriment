@@ -137,7 +137,7 @@ DEC_ROW:
 END_R_R:
 
     ; 延迟
-    mov ecx, 0x1000000  ; 调整这个值以控制速度
+    mov ecx, 0x100000  ; 调整这个值以控制速度
 DELAY:
     loop DELAY
 
