@@ -7,7 +7,7 @@
 extern STDIO stdio;
 
 int times = 0;
-
+int flag = -1;
 InterruptManager::InterruptManager()
 {
     initialize();
@@ -100,17 +100,43 @@ extern "C" void c_time_interrupt_handler()
     int len = sizeof(str_run) - 1;
 
     char _result[len + 1];
+
+    //一个一个显示
+    // for (int i = 0; i < len; ++i)
+    // {
+    //     if (i != ((int)(times/3) % len))
+    //     {
+    //         _result[i] = ' ';
+    //     }
+    //     else
+    //     {
+    //         _result[i] = str_run[i];
+    //     }
+    // }
+    // _result[len] = '\0'; // 结束符
+
+    //滚动显示
+    int pos = (int)(times) % (2 * len);
     for (int i = 0; i < len; ++i)
     {
-        if (i != ((int)(times/3) % len))
-        {
-            _result[i] = ' ';
-        }
-        else
-        {
-            _result[i] = str_run[i];
+        if (pos < len) {
+            // 消失的尾巴
+            if (i < pos) {
+                _result[i] = ' ';
+            } else {
+                _result[i] = str_run[i - pos];
+            }
+        } else {
+            // 出现的头
+            int actualPos = pos - len;
+            if (i < actualPos) {
+                _result[i] = str_run[len - actualPos + i];
+            } else {
+                _result[i] = ' ';
+            }
         }
     }
+    _result[len] = '\0'; // 结束符
 
     // 移动光标到(0,0)输出字符
     stdio.moveCursor(0);
@@ -118,8 +144,8 @@ extern "C" void c_time_interrupt_handler()
     {
         stdio.print(str[i]);
     }
-
-    // 输出中断发生的次数
+    
+    // 跑马灯打印字符串
     for(int i = 0; i < len; ++i ) 
     {
         stdio.print(_result[i]);
