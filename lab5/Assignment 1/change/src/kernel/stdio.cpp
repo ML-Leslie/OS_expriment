@@ -255,7 +255,7 @@ int printf(const char *const fmt, ...)
                     base = 10;
                 else if (fmt[i] == 'x')
                     base = 16;
-                else // fmt[i] == 'o'
+                else if (fmt[i] == 'o')
                     base = 8;
 
                 char temp_buffer[33];
