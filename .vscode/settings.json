@@ -1,6 +1,15 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "stdlib.h": "c",
         "stdio.h": "c"
+=======
+        "array": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+>>>>>>> 94b24e36ebe063227371188ed4da852b418f9fea
     }
 }
