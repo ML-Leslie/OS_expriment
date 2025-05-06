@@ -6,7 +6,7 @@
       - [1. 解释 Example 1 代码](#1-解释-example-1-代码)
       - [2. 编译和链接](#2-编译和链接)
       - [3. 编写 Makefile](#3-编写-makefile)
-    - [Asssignment 2 使用C/C++来编写内核](#asssignment-2-使用cc来编写内核)
+    - [Assignment 2 使用C/C++来编写内核](#assignment-2-使用cc来编写内核)
       - [复现 Example 2 代码并实现](#复现-example-2-代码并实现)
       - [修改为输出学号（23336050）](#修改为输出学号23336050)
     - [Assignment 3 中断的处理](#assignment-3-中断的处理)
@@ -111,7 +111,7 @@
         ```
 - 尝试运行 `make`：  
     ![alt text](images/image-1.png)
-#### Asssignment 2 使用C/C++来编写内核
+#### Assignment 2 使用C/C++来编写内核
 ##### 复现 Example 2 代码并实现
 - `makefile`部分代码解释：
     ```makefile
