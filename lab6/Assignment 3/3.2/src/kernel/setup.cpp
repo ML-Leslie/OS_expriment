@@ -24,9 +24,11 @@ void Philosopher(void *arg)
         // 取左边的筷子
         printf("Philosopher %d is trying to pick up the chopsticks on the left\n", id);
         chopsticks[id].P();
+        printf("Philosopher %d has picked up the chopsticks on the left\n", id);
         // 取右边的筷子
         printf("Philosopher %d is trying to pick up the chopsticks on the right\n", id);
         chopsticks[(id + 1) % PHILOSOPHER_COUNT].P();
+        printf("Philosopher %d has picked up the chopsticks on the right\n", id);
         mutex.V();  // 离开临界区
         // 吃饭
         printf("Philosopher %d is eating\n", id);
