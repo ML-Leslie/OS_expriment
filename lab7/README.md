@@ -530,4 +530,4 @@ int MemoryManager::allocatePages(enum AddressPoolType type, const int count)
 - 对虚拟页内存管理的理解还不够深入，可能上述某些自己的理解的有错误
 - 在 Assignment 3 测试虚拟页内存管理的实现是否存在bug时，还可以设置更多的测试不同方面测试用例来验证
 - Assignment 4 中的 FIFO 页面置换算法没有真正实现内存置换
-- 学习第六章内存管理加深了对课本理论知识的理解:+1:
+- 学习第六章内存管理加深了对课本理论知识的理解 :+1:
