@@ -2,6 +2,7 @@
 #define BYTE_MEMORY_MANAGER_H
 
 #include "memory.h"
+#include "sync.h"
 
 enum ArenaType
 {
@@ -37,6 +38,7 @@ private:
     static const int minSize = 16;              // 内存块的最小大小
     int arenaSize[MEM_BLOCK_TYPES];             // 每种类型对应的内存块大小
     MemoryBlockListItem *arenas[MEM_BLOCK_TYPES]; // 每种类型的arena内存块的指针
+    SpinLock memoryLock; // 内存锁，保护内存分配的原子性
 
 public:
     ByteMemoryManager();

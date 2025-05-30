@@ -6,7 +6,7 @@
 #include "program.h"
 #include "os_modules.h"
 #include "ByteMemoryManager.h"
-
+#include "sync.h"
 
 ByteMemoryManager kernelByteMemoryManager;
 
@@ -17,6 +17,9 @@ ByteMemoryManager::ByteMemoryManager()
 
 void ByteMemoryManager::initialize()
 {
+    // 初始化互斥锁
+    memoryLock.initialize();
+
     int size = minSize;
     for (int i = 0; i < MEM_BLOCK_TYPES; ++i)
     {
@@ -28,6 +31,9 @@ void ByteMemoryManager::initialize()
 
 void *ByteMemoryManager::allocate(int size)
 {
+    // 获取锁，保护整个分配过程
+    memoryLock.lock();
+
     int index = 0;
     while (index < MEM_BLOCK_TYPES && arenaSize[index] < size)
         ++index;
@@ -56,11 +62,22 @@ void *ByteMemoryManager::allocate(int size)
         if (arenas[index] == nullptr)
         {
             if (!getNewArena(poolType, index))
+            {
+                memoryLock.unlock();
                 return nullptr;
+            }
         }
 
         // 每次取出内存块链表中的第一个内存块
         ans = arenas[index];
+
+        printf("Thread %d allocate %d bytes, address: 0x%x\n",
+               pcb->pid, arenaSize[index], (int)ans);
+
+        //error test
+        int delay = 0xffffffff;
+        while (delay--); // 这里是为了测试内存分配的延时
+
         arenas[index] = ((MemoryBlockListItem *)ans)->next;
 
         if (arenas[index])
@@ -73,6 +90,7 @@ void *ByteMemoryManager::allocate(int size)
         //printf("---ByteMemoryManager::allocate----\n");
     }
 
+    memoryLock.unlock();
     return ans;
 }
 
@@ -117,6 +135,8 @@ bool ByteMemoryManager::getNewArena(AddressPoolType type, int index)
 
 void ByteMemoryManager::release(void *address)
 {
+    memoryLock.lock();
+
     // 由于Arena是按页分配的，所以其首地址的低12位必定0，
     // 其中划分的内存块的高20位也必定与其所在的Arena首地址相同
     Arena *arena = (Arena *)((int)address & 0xfffff000);
@@ -186,4 +206,5 @@ void ByteMemoryManager::release(void *address)
             memoryManager.releasePages(poolType,(int)arena, 1);
         }
     }
+    memoryLock.unlock();
 }

@@ -75,25 +75,30 @@ void first_process()
 
 void second_thread(void *arg)
 {
-    //printf("thread exit\n");
-    //exit(0);
+    printf("\nsecond thread\n");
+    char *str = (char *)malloc(32);
+    if (str) {
+        printf("Thread 1 malloc success: 0x%x\n", (uint32)str);
+        free(str);
+        printf("Thread 1 malloc freed\n");
+    }
 }
 
 void first_thread(void *arg)
 {
     printf("\nstart thread\n");
     printf("Test for thread...\n");
+    programManager.executeThread(second_thread, nullptr, "second", 1);
 
     // 先在线程中测试内存分配
     char *str = (char *)malloc(32);
     if (str) {
-        printf("Thread malloc success: 0x%x\n", (uint32)str);
+        printf("Thread 0 malloc success: 0x%x\n", (uint32)str);
         free(str);
-        printf("Thread malloc freed\n");
+        printf("Thread 0 malloc freed\n");
     }
-    printf("\nstart process\n");
-    programManager.executeProcess((const char *)first_process, 1);
-    // programManager.executeThread(second_thread, nullptr, "second", 1);
+    // printf("\nstart process\n");
+    // programManager.executeProcess((const char *)first_process, 1);
     asm_halt();
 }
 
